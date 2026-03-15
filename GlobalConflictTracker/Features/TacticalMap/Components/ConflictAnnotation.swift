@@ -1,62 +1,120 @@
 import SwiftUI
 
 /// Custom map annotation marker differentiated by event type
-/// Replaces generic red circles with typed icons
+/// Features: pulsing ring for critical, event type icon, severity color, selection glow, label
 struct ConflictAnnotation: View {
     let event: ConflictEvent
+    var isSelected: Bool = false
 
     @State private var isPulsing = false
 
     private var size: CGFloat {
-        event.severity == .critical ? 32 : 24
+        if isSelected { return 40 }
+        return event.severity == .critical ? 32 : 24
+    }
+
+    private var markerColor: Color {
+        AppColors.severityColor(event.severity)
     }
 
     var body: some View {
-        ZStack {
-            // Outer pulse ring for critical events
-            if event.severity == .critical {
+        VStack(spacing: 2) {
+            ZStack {
+                // Selection glow
+                if isSelected {
+                    Circle()
+                        .fill(markerColor.opacity(0.25))
+                        .frame(width: size + 24, height: size + 24)
+
+                    Circle()
+                        .stroke(markerColor, lineWidth: 2)
+                        .frame(width: size + 20, height: size + 20)
+                }
+
+                // Outer pulse ring for critical events
+                if event.severity == .critical {
+                    Circle()
+                        .fill(markerColor.opacity(0.2))
+                        .frame(width: size + 16, height: size + 16)
+                        .scaleEffect(isPulsing ? 1.5 : 1.0)
+                        .opacity(isPulsing ? 0 : 0.8)
+                        .animation(
+                            .easeOut(duration: 2.0).repeatForever(autoreverses: false),
+                            value: isPulsing
+                        )
+                }
+
+                // Severity ring
                 Circle()
-                    .fill(AppColors.accent.opacity(0.2))
-                    .frame(width: size + 16, height: size + 16)
-                    .scaleEffect(isPulsing ? 1.3 : 1.0)
-                    .opacity(isPulsing ? 0 : 0.6)
-                    .animation(
-                        .easeInOut(duration: 1.5).repeatForever(autoreverses: false),
-                        value: isPulsing
+                    .fill(markerColor.opacity(0.3))
+                    .frame(width: size + 8, height: size + 8)
+
+                // Core marker with border
+                Circle()
+                    .fill(markerColor)
+                    .frame(width: size, height: size)
+                    .overlay(
+                        Circle()
+                            .stroke(.white.opacity(0.3), lineWidth: 1)
                     )
+                    .shadow(color: markerColor.opacity(0.6), radius: isSelected ? 8 : 4)
+
+                // Type icon
+                Image(systemName: event.eventType.icon)
+                    .font(.system(size: size * 0.38, weight: .bold))
+                    .foregroundStyle(.white)
             }
 
-            // Severity ring
-            Circle()
-                .fill(AppColors.severityColor(event.severity).opacity(0.3))
-                .frame(width: size + 8, height: size + 8)
+            // Marker pin tail
+            Triangle()
+                .fill(markerColor)
+                .frame(width: 10, height: 6)
+                .shadow(color: markerColor.opacity(0.5), radius: 2)
 
-            // Core marker
-            Circle()
-                .fill(AppColors.severityColor(event.severity))
-                .frame(width: size, height: size)
-
-            // Type icon
-            Image(systemName: event.eventType.icon)
-                .font(.system(size: size * 0.4, weight: .semibold))
-                .foregroundStyle(.white)
+            // Label — short title
+            if isSelected {
+                Text(event.title)
+                    .font(.system(size: 9, weight: .bold))
+                    .tracking(0.5)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(AppColors.surface.opacity(0.9))
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                    .lineLimit(1)
+                    .frame(maxWidth: 120)
+            }
         }
         .onAppear {
             if event.severity == .critical {
                 isPulsing = true
             }
         }
+        .animation(.easeInOut(duration: 0.25), value: isSelected)
         .accessibilityLabel("\(event.severity.label) \(event.eventType.accessibilityLabel): \(event.title)")
     }
 }
 
+/// Small triangle for marker pin tail
+struct Triangle: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.midX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.closeSubpath()
+        return path
+    }
+}
+
 #Preview("Annotations") {
-    HStack(spacing: 30) {
-        ForEach(SampleData.events) { event in
-            ConflictAnnotation(event: event)
-        }
+    HStack(spacing: 40) {
+        ConflictAnnotation(event: SampleData.events[0], isSelected: true)
+        ConflictAnnotation(event: SampleData.events[1])
+        ConflictAnnotation(event: SampleData.events[2])
+        ConflictAnnotation(event: SampleData.events[3])
     }
     .padding(40)
-    .background(AppColors.background)
+    .background(Color(red: 0.1, green: 0.15, blue: 0.1))
     .preferredColorScheme(.dark)
 }

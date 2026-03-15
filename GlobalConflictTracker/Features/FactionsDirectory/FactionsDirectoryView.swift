@@ -55,7 +55,7 @@ struct FactionsDirectoryView: View {
                 factionsList
             }
         }
-        .background(AppColors.background)
+        .background(AppColors.background.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $viewModel.showFilterSheet) {
             FactionFilterSheet(viewModel: viewModel)

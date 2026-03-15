@@ -11,6 +11,29 @@ final class TacticalMapViewModel {
     var errorMessage: String?
     var searchText = ""
     var showAlert = false
+    var mapStyleOption: MapStyleOption = .satellite
+
+    enum MapStyleOption: String, CaseIterable {
+        case satellite = "Satellite"
+        case hybrid = "Hybrid"
+        case standard = "Standard"
+
+        var mapStyle: MapStyle {
+            switch self {
+            case .satellite: .imagery(elevation: .flat)
+            case .hybrid: .hybrid(elevation: .flat, pointsOfInterest: .excludingAll)
+            case .standard: .standard(elevation: .flat, pointsOfInterest: .excludingAll)
+            }
+        }
+
+        var icon: String {
+            switch self {
+            case .satellite: "globe.americas.fill"
+            case .hybrid: "map.fill"
+            case .standard: "map"
+            }
+        }
+    }
 
     var cameraPosition: MapCameraPosition = .region(
         MKCoordinateRegion(

@@ -38,7 +38,7 @@ struct IntelFeedView: View {
                 feedContent
             }
         }
-        .background(AppColors.background)
+        .background(AppColors.background.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
         .task {
             await viewModel.loadReports()

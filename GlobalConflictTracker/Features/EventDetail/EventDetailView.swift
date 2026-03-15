@@ -41,7 +41,7 @@ struct EventDetailView: View {
             }
             .padding(AppSpacing.md)
         }
-        .background(AppColors.background)
+        .background(AppColors.background.ignoresSafeArea())
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -69,7 +69,7 @@ struct EventDetailView: View {
                 ConflictAnnotation(event: viewModel.event)
             }
         }
-        .mapStyle(.standard(elevation: .flat, pointsOfInterest: .excludingAll))
+        .mapStyle(.imagery(elevation: .flat))
         .frame(height: 200)
         .clipShape(RoundedRectangle(cornerRadius: AppSpacing.radiusLarge))
         .overlay(

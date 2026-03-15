@@ -30,7 +30,7 @@ struct FactionProfileView: View {
             }
             .padding(AppSpacing.md)
         }
-        .background(AppColors.background)
+        .background(AppColors.background.ignoresSafeArea())
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

@@ -44,23 +44,34 @@ struct TacticalMapView: View {
     // MARK: - Map
 
     private var mapContent: some View {
-        Map(position: $viewModel.cameraPosition) {
-            ForEach(viewModel.filteredEvents) { event in
-                Annotation(
-                    event.title,
-                    coordinate: event.coordinate,
-                    anchor: .center
-                ) {
-                    Button {
-                        viewModel.selectEvent(event)
-                    } label: {
-                        ConflictAnnotation(event: event)
+        ZStack {
+            Map(position: $viewModel.cameraPosition) {
+                ForEach(viewModel.filteredEvents) { event in
+                    Annotation(
+                        event.title,
+                        coordinate: event.coordinate,
+                        anchor: .bottom
+                    ) {
+                        Button {
+                            viewModel.selectEvent(event)
+                        } label: {
+                            ConflictAnnotation(
+                                event: event,
+                                isSelected: viewModel.selectedEvent?.id == event.id
+                            )
+                        }
                     }
                 }
             }
+            .mapStyle(viewModel.mapStyleOption.mapStyle)
+            .mapControlVisibility(.hidden)
+
+            // Tactical dark overlay — subtle darkening for cohesive look
+            if viewModel.mapStyleOption == .satellite || viewModel.mapStyleOption == .hybrid {
+                Color.black.opacity(0.15)
+                    .allowsHitTesting(false)
+            }
         }
-        .mapStyle(.standard(elevation: .flat, pointsOfInterest: .excludingAll))
-        .mapControlVisibility(.hidden)
         .ignoresSafeArea()
     }
 
@@ -93,11 +104,20 @@ struct TacticalMapView: View {
 
                 Spacer()
 
-                // Map layers button
-                Button {
-                    // Map options
+                // Map style selector
+                Menu {
+                    ForEach(TacticalMapViewModel.MapStyleOption.allCases, id: \.self) { option in
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                viewModel.mapStyleOption = option
+                            }
+                            HapticManager.selection()
+                        } label: {
+                            Label(option.rawValue, systemImage: option.icon)
+                        }
+                    }
                 } label: {
-                    Image(systemName: "square.3.layers.3d")
+                    Image(systemName: viewModel.mapStyleOption.icon)
                         .font(.system(size: 18))
                         .foregroundStyle(AppColors.textPrimary)
                         .frame(width: AppSpacing.minTouchTarget, height: AppSpacing.minTouchTarget)

@@ -144,7 +144,7 @@ struct SystemSettingsView: View {
             }
             .padding(AppSpacing.md)
         }
-        .background(AppColors.background)
+        .background(AppColors.background.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
     }
 
