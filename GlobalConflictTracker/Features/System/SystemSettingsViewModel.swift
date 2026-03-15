@@ -9,6 +9,15 @@ final class SystemSettingsViewModel {
     var selectedRegionIDs: Set<String>
     var availableRegions: [OperationalRegion] = SampleData.regions
 
+    // Dev tools
+    var isSeedingInProgress = false
+    var seedResult: String?
+
+    var useMockServices: Bool {
+        get { ServiceContainer.shared.useMockServices }
+        set { ServiceContainer.shared.useMockServices = newValue }
+    }
+
     init() {
         if let data = UserDefaults.standard.data(forKey: "userPreferences"),
            let prefs = try? JSONDecoder().decode(UserPreferences.self, from: data) {
@@ -44,5 +53,17 @@ final class SystemSettingsViewModel {
 
     func resetOnboarding() {
         UserDefaults.standard.set(false, forKey: "hasCompletedOnboarding")
+    }
+
+    func seedFirestore() async {
+        isSeedingInProgress = true
+        seedResult = nil
+        do {
+            try await ServiceContainer.shared.seedFirestore()
+            seedResult = "Seeding complete — 4 events, 6 factions, 4 reports, 4 regions pushed."
+        } catch {
+            seedResult = "Seed failed: \(error.localizedDescription)"
+        }
+        isSeedingInProgress = false
     }
 }

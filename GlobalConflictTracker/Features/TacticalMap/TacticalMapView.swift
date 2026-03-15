@@ -4,7 +4,7 @@ import MapKit
 /// Matches Figma nodes 1:2 (Tactical Map) and 1:440 (Main Map Viewport)
 struct TacticalMapView: View {
     @State private var viewModel = TacticalMapViewModel(
-        eventService: MockEventService()
+        eventService: ServiceContainer.shared.eventService
     )
 
     var body: some View {

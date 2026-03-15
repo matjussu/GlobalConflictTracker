@@ -3,7 +3,7 @@ import SwiftUI
 /// Matches Figma node 1:79 — Intel Feed
 struct IntelFeedView: View {
     @State private var viewModel = IntelFeedViewModel(
-        eventService: MockEventService()
+        eventService: ServiceContainer.shared.eventService
     )
 
     var body: some View {

@@ -8,8 +8,8 @@ struct EventDetailView: View {
     init(event: ConflictEvent) {
         _viewModel = State(initialValue: EventDetailViewModel(
             event: event,
-            eventService: MockEventService(),
-            factionService: MockFactionService()
+            eventService: ServiceContainer.shared.eventService,
+            factionService: ServiceContainer.shared.factionService
         ))
     }
 

@@ -58,13 +58,76 @@ struct SystemSettingsView: View {
                     }
                 }
 
+                // Dev Tools section
+                VStack(alignment: .leading, spacing: AppSpacing.sm) {
+                    SectionHeader(title: "Dev Tools")
+
+                    toggleRow(
+                        icon: "server.rack",
+                        title: "Use Mock Data",
+                        description: "Switch between local mock data and Firebase",
+                        isOn: Binding(
+                            get: { viewModel.useMockServices },
+                            set: { viewModel.useMockServices = $0 }
+                        )
+                    )
+
+                    // Data source indicator
+                    HStack(spacing: AppSpacing.sm) {
+                        Circle()
+                            .fill(viewModel.useMockServices ? AppColors.warning : AppColors.success)
+                            .frame(width: 8, height: 8)
+
+                        Text(viewModel.useMockServices ? "MOCK DATA ACTIVE" : "FIREBASE CONNECTED")
+                            .font(AppTypography.labelSmall)
+                            .tracking(AppTypography.trackingWide)
+                            .foregroundStyle(AppColors.textSecondary)
+                    }
+                    .padding(.horizontal, AppSpacing.md)
+
+                    // Seed button
+                    Button {
+                        Task { await viewModel.seedFirestore() }
+                    } label: {
+                        HStack(spacing: AppSpacing.sm) {
+                            if viewModel.isSeedingInProgress {
+                                ProgressView()
+                                    .tint(AppColors.textPrimary)
+                            } else {
+                                Image(systemName: "arrow.up.doc.fill")
+                                    .font(.system(size: 16))
+                            }
+                            Text("Seed Firebase with Sample Data")
+                                .font(AppTypography.body)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(minHeight: AppSpacing.minTouchTarget)
+                        .foregroundStyle(AppColors.textPrimary)
+                        .background(AppColors.surface)
+                        .clipShape(RoundedRectangle(cornerRadius: AppSpacing.radiusMedium))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: AppSpacing.radiusMedium)
+                                .stroke(AppColors.border, lineWidth: 1)
+                        )
+                    }
+                    .disabled(viewModel.isSeedingInProgress)
+
+                    // Seed result feedback
+                    if let result = viewModel.seedResult {
+                        Text(result)
+                            .font(AppTypography.bodySmall)
+                            .foregroundStyle(result.contains("failed") ? AppColors.danger : AppColors.success)
+                            .padding(.horizontal, AppSpacing.md)
+                    }
+                }
+
                 // About section
                 VStack(alignment: .leading, spacing: AppSpacing.sm) {
                     SectionHeader(title: "About")
 
                     infoRow(label: "Version", value: "1.0.0")
                     infoRow(label: "Build", value: "2026.03.15")
-                    infoRow(label: "Data Source", value: "ACLED / Firebase")
+                    infoRow(label: "Data Source", value: viewModel.useMockServices ? "Mock (Local)" : "ACLED / Firebase")
                 }
 
                 // Reset

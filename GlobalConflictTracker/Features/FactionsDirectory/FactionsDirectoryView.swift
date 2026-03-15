@@ -3,7 +3,7 @@ import SwiftUI
 /// Matches Figma node 1:198 — Factions Directory
 struct FactionsDirectoryView: View {
     @State private var viewModel = FactionsDirectoryViewModel(
-        factionService: MockFactionService()
+        factionService: ServiceContainer.shared.factionService
     )
 
     var body: some View {
