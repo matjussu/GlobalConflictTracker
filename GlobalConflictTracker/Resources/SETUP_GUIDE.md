@@ -118,28 +118,35 @@ service cloud.firestore {
 3. Toggle **"Use Mock Data"** OFF to switch to Firebase
 4. The app now reads from Firestore in real-time
 
-### Option B: Seed from Terminal (Python Script)
+### Option B: Seed from Terminal (Static Sample Data)
 
-1. Download your service account key:
-   - Firebase Console → Project Settings → **Service Accounts**
-   - Click **Generate new private key** → download JSON
-   - Save it as `scripts/serviceAccountKey.json` (DO NOT commit this file)
-
-2. Run the seed script:
 ```bash
 cd scripts
-pip install -r requirements.txt
-python seed_firestore.py --key serviceAccountKey.json
+node seed_with_cli_token.mjs
 ```
 
 3. In the app, toggle "Use Mock Data" OFF — the data appears in real-time
 
-## 11. Verify Everything Works
+## 11. GDELT Real-Time Data Pipeline
+
+Fetch real conflict/military events from GDELT (100% free, no API key needed):
+
+```bash
+cd scripts
+node gdelt_pipeline.mjs              # One-time fetch
+node gdelt_pipeline.mjs --continuous  # Auto-refresh every 15 min
+```
+
+This pushes real-world events into Firestore. The iOS app receives them automatically via snapshot listeners.
+
+## 12. Verify Everything Works
 
 - [ ] App builds without errors
 - [ ] Onboarding flow works (3 steps)
 - [ ] Mock mode: all 4 tabs show data
 - [ ] Firebase seeded (via app or script)
 - [ ] Firebase mode: toggle Mock OFF, data loads from Firestore
-- [ ] Real-time: add a document in Firebase Console, it appears in the app
+- [ ] GDELT pipeline: run `node gdelt_pipeline.mjs` → real events appear in the app
+- [ ] Real-time: run pipeline again → new events appear automatically
+- [ ] Map: satellite view with conflict markers across the world
 - [ ] Toggle between Mock/Firebase: data switches instantly
