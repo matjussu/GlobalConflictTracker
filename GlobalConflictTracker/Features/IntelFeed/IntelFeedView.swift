@@ -39,7 +39,7 @@ struct IntelFeedView: View {
             }
         }
         .background(AppColors.background)
-        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .task {
             await viewModel.loadReports()
         }
@@ -85,11 +85,12 @@ struct IntelFeedView: View {
             LazyVStack(spacing: AppSpacing.sm) {
                 ForEach(viewModel.filteredReports) { report in
                     NavigationLink(value: report) {
-                        IntelArticleCard(report: report) {
-                            Task { await viewModel.markAsRead(report) }
-                        }
+                        IntelArticleCard(report: report)
                     }
                     .buttonStyle(.plain)
+                    .simultaneousGesture(TapGesture().onEnded {
+                        Task { await viewModel.markAsRead(report) }
+                    })
                 }
             }
             .padding(.horizontal, AppSpacing.md)

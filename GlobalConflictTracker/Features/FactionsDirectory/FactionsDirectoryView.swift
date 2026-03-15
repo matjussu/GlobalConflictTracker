@@ -56,7 +56,7 @@ struct FactionsDirectoryView: View {
             }
         }
         .background(AppColors.background)
-        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $viewModel.showFilterSheet) {
             FactionFilterSheet(viewModel: viewModel)
                 .presentationDetents([.medium])

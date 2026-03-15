@@ -14,7 +14,7 @@ struct IntelReport: Identifiable, Codable, Hashable {
     var isRead: Bool = false
 }
 
-enum IntelCategory: String, Codable, CaseIterable {
+enum IntelCategory: String, Codable, CaseIterable, Hashable {
     case chronological
     case highAlert
     case global

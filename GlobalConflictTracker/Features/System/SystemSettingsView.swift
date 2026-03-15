@@ -82,7 +82,7 @@ struct SystemSettingsView: View {
             .padding(AppSpacing.md)
         }
         .background(AppColors.background)
-        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
     }
 
     // MARK: - Components

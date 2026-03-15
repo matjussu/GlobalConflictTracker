@@ -35,7 +35,7 @@ struct TacticalMapView: View {
                 }
             }
         }
-        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .task {
             await viewModel.loadEvents()
         }
