@@ -13,7 +13,7 @@ final class FactionProfileViewModel {
 
     init(
         faction: Faction,
-        eventService: EventServiceProtocol = EventFirebaseService()
+        eventService: EventServiceProtocol = ServiceContainer.shared.eventService
     ) {
         self.faction = faction
         self.eventService = eventService

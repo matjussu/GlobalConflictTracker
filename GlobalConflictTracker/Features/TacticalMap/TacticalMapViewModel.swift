@@ -11,26 +11,33 @@ final class TacticalMapViewModel {
     var errorMessage: String?
     var searchText = ""
     var showAlert = false
-    var mapStyleOption: MapStyleOption = .satellite
+    var mapStyleOption: MapStyleOption = .tactical
 
     enum MapStyleOption: String, CaseIterable {
+        case tactical = "Tactical"
         case satellite = "Satellite"
         case hybrid = "Hybrid"
-        case standard = "Standard"
+        case terrain = "Terrain"
 
         var mapStyle: MapStyle {
             switch self {
-            case .satellite: .imagery(elevation: .flat)
-            case .hybrid: .hybrid(elevation: .flat, pointsOfInterest: .excludingAll)
-            case .standard: .standard(elevation: .flat, pointsOfInterest: .excludingAll)
+            case .tactical:
+                .standard(elevation: .flat, emphasis: .muted, pointsOfInterest: .excludingAll, showsTraffic: false)
+            case .satellite:
+                .imagery(elevation: .realistic)
+            case .hybrid:
+                .hybrid(elevation: .realistic, pointsOfInterest: .excludingAll, showsTraffic: false)
+            case .terrain:
+                .standard(elevation: .realistic, emphasis: .muted, pointsOfInterest: .excludingAll, showsTraffic: false)
             }
         }
 
         var icon: String {
             switch self {
+            case .tactical: "shield.fill"
             case .satellite: "globe.americas.fill"
             case .hybrid: "map.fill"
-            case .standard: "map"
+            case .terrain: "mountain.2.fill"
             }
         }
     }
@@ -45,7 +52,7 @@ final class TacticalMapViewModel {
     private let eventService: EventServiceProtocol
     private var cancellables = Set<AnyCancellable>()
 
-    init(eventService: EventServiceProtocol = EventFirebaseService()) {
+    init(eventService: EventServiceProtocol = ServiceContainer.shared.eventService) {
         self.eventService = eventService
         startObserving()
     }

@@ -13,7 +13,7 @@ final class IntelFeedViewModel {
     private let eventService: EventServiceProtocol
     private var cancellables = Set<AnyCancellable>()
 
-    init(eventService: EventServiceProtocol = EventFirebaseService()) {
+    init(eventService: EventServiceProtocol = ServiceContainer.shared.eventService) {
         self.eventService = eventService
         startObserving()
     }

@@ -66,11 +66,20 @@ struct TacticalMapView: View {
             .mapStyle(viewModel.mapStyleOption.mapStyle)
             .mapControlVisibility(.hidden)
 
-            // Tactical dark overlay — subtle darkening for cohesive look
-            if viewModel.mapStyleOption == .satellite || viewModel.mapStyleOption == .hybrid {
-                Color.black.opacity(0.15)
-                    .allowsHitTesting(false)
+            // Tactical overlay — per-style tinting for cohesive look
+            Group {
+                switch viewModel.mapStyleOption {
+                case .tactical:
+                    Color(red: 0.0, green: 0.05, blue: 0.0).opacity(0.08)
+                case .satellite:
+                    Color.black.opacity(0.20)
+                case .hybrid:
+                    Color.black.opacity(0.10)
+                case .terrain:
+                    Color.black.opacity(0.10)
+                }
             }
+            .allowsHitTesting(false)
         }
         .ignoresSafeArea()
     }

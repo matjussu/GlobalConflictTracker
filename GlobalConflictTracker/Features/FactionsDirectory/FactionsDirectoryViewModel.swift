@@ -25,7 +25,7 @@ final class FactionsDirectoryViewModel {
     private let factionService: FactionServiceProtocol
     private var cancellables = Set<AnyCancellable>()
 
-    init(factionService: FactionServiceProtocol = FactionFirebaseService()) {
+    init(factionService: FactionServiceProtocol = ServiceContainer.shared.factionService) {
         self.factionService = factionService
         startObserving()
     }
