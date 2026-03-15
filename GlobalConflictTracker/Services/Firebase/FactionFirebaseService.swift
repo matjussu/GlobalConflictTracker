@@ -47,4 +47,23 @@ final class FactionFirebaseService: FactionServiceProtocol {
         guard !query.isEmpty else { return allFactions }
         return allFactions.filter { $0.name.localizedCaseInsensitiveContains(query) }
     }
+
+    func observeFaction(id: String) -> AnyPublisher<Faction, Error> {
+        let subject = PassthroughSubject<Faction, Error>()
+
+        manager.factionsCollection.document(id)
+            .addSnapshotListener { snapshot, error in
+                if let error {
+                    subject.send(completion: .failure(error))
+                    return
+                }
+                guard let snapshot, snapshot.exists else { return }
+
+                if let faction = try? snapshot.data(as: Faction.self) {
+                    subject.send(faction)
+                }
+            }
+
+        return subject.eraseToAnyPublisher()
+    }
 }

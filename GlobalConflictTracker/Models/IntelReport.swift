@@ -12,6 +12,9 @@ struct IntelReport: Identifiable, Codable, Hashable {
     var relatedEventID: String?
     var category: IntelCategory
     var isRead: Bool = false
+    var sourceURL: String?
+    var contentSummary: String?
+    var keyPoints: [String]?
 }
 
 enum IntelCategory: String, Codable, CaseIterable, Hashable {

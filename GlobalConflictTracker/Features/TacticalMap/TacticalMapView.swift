@@ -46,6 +46,20 @@ struct TacticalMapView: View {
     private var mapContent: some View {
         ZStack {
             Map(position: $viewModel.cameraPosition) {
+                // Impact zones (rendered behind annotations)
+                ForEach(viewModel.filteredEvents) { event in
+                    MapCircle(center: event.coordinate, radius: event.impactRadius)
+                        .foregroundStyle(AppColors.severityColor(event.severity).opacity(0.10))
+                        .stroke(AppColors.severityColor(event.severity).opacity(0.25), lineWidth: 1)
+                }
+
+                // Faction connection lines between related events
+                ForEach(viewModel.eventConnections, id: \.id) { connection in
+                    MapPolyline(coordinates: [connection.from, connection.to])
+                        .stroke(AppColors.accent.opacity(0.3), lineWidth: 1.5)
+                }
+
+                // Event annotations
                 ForEach(viewModel.filteredEvents) { event in
                     Annotation(
                         event.title,

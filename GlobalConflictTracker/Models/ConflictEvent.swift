@@ -19,4 +19,14 @@ struct ConflictEvent: Identifiable, Codable, Hashable {
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
+
+    /// Impact zone radius in meters, based on severity
+    var impactRadius: CLLocationDistance {
+        switch severity {
+        case .critical: 150_000
+        case .warning: 80_000
+        case .low: 40_000
+        }
+    }
+
 }

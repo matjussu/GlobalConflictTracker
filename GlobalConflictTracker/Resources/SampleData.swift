@@ -215,7 +215,16 @@ enum SampleData {
             sourceReliability: confirmedSource,
             relatedEventID: "evt-001",
             category: .highAlert,
-            isRead: false
+            isRead: false,
+            sourceURL: nil,
+            contentSummary: "Multi-spectrum satellite analysis confirms the deployment of at least three mechanized battalions along the southern demilitarized zone, marking the largest force concentration in this area since 2019. Thermal imaging captured during nighttime passes reveals active vehicle staging areas, field command posts, and logistics nodes consistent with offensive preparation. Intelligence assessments indicate a 72-96 hour readiness window before potential forward movement. Coalition naval assets in the Red Sea corridor have been placed on heightened alert status in response.",
+            keyPoints: [
+                "Three mechanized battalions confirmed via thermal imaging — estimated 4,500 personnel",
+                "Logistics staging areas indicate 72-96 hour readiness window",
+                "Coalition naval assets in Red Sea on heightened alert",
+                "Field command posts established at forward positions near the DMZ line",
+                "No diplomatic de-escalation channels currently active"
+            ]
         ),
         IntelReport(
             id: "intel-002",
@@ -228,7 +237,15 @@ enum SampleData {
             sourceReliability: likelySource,
             relatedEventID: nil,
             category: .chronological,
-            isRead: true
+            isRead: true,
+            sourceURL: nil,
+            contentSummary: "SIGINT stations detected a concentrated burst of encrypted transmissions originating from a naval formation operating in restricted waters south of the Bab el-Mandeb strait. The transmission pattern — short, high-frequency bursts at irregular intervals — is consistent with tactical coordination protocols used during pre-engagement maneuvering. Partial signal analysis suggests at least 4 vessels are involved in the formation. Full decryption is pending and has been escalated to priority processing. Historical pattern matching associates this signature with carrier strike group communications.",
+            keyPoints: [
+                "High-frequency burst pattern consistent with tactical coordination protocols",
+                "At least 4 vessels identified in the formation via signal triangulation",
+                "Transmission origin: restricted waters south of Bab el-Mandeb strait",
+                "Decryption escalated to priority processing — results expected within 12 hours"
+            ]
         ),
         IntelReport(
             id: "intel-003",
@@ -241,7 +258,16 @@ enum SampleData {
             sourceReliability: confirmedSource,
             relatedEventID: nil,
             category: .global,
-            isRead: false
+            isRead: false,
+            sourceURL: nil,
+            contentSummary: "Analysis of commercial satellite imagery from multiple providers confirms a rapid and significant military buildup along the northern border region. Over the past 72 hours, an estimated 15,000 additional personnel have been deployed to forward operating bases, accompanied by heavy armor, mobile artillery systems, and field hospital units. Supply convoys observed on three major access routes suggest sustained operational capability. This deployment exceeds routine rotation patterns and aligns with previous escalation indicators flagged in last month's threat assessment. Regional allies have been notified through secure channels.",
+            keyPoints: [
+                "15,000 additional personnel deployed in 72 hours — exceeds routine rotation",
+                "Heavy armor and mobile artillery systems observed at forward bases",
+                "Field hospital units deployed — indicates expectation of sustained operations",
+                "Supply convoys active on three major routes to the border region",
+                "Regional allies notified through secure diplomatic channels"
+            ]
         ),
         IntelReport(
             id: "intel-004",
@@ -254,7 +280,15 @@ enum SampleData {
             sourceReliability: unverifiedSource,
             relatedEventID: "evt-003",
             category: .chronological,
-            isRead: true
+            isRead: true,
+            sourceURL: nil,
+            contentSummary: "A leaked diplomatic cable — currently unverified but circulating among credible OSINT channels — indicates that a coordinated sanctions package targeting three nations involved in arms proliferation is being finalized. The sanctions reportedly target dual-use technology exports, financial instruments linked to defense procurement, and specific individuals within military-industrial complexes. If confirmed, this would represent the most significant multilateral sanctions action in the region since 2020. Financial markets in affected regions are expected to react within 24-48 hours of official announcement. The authenticity of the cable is still under review by multiple intelligence agencies.",
+            keyPoints: [
+                "Sanctions target dual-use technology exports and defense procurement networks",
+                "Three nations reportedly named — identities not yet confirmed",
+                "Financial markets expected to react within 24-48 hours of announcement",
+                "Cable authenticity still under review by multiple agencies"
+            ]
         ),
     ]
 

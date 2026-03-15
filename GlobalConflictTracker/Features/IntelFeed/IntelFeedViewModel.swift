@@ -12,6 +12,7 @@ final class IntelFeedViewModel {
 
     private let eventService: EventServiceProtocol
     private var cancellables = Set<AnyCancellable>()
+    private var optimisticallyReadIDs: Set<String> = []
 
     init(eventService: EventServiceProtocol = ServiceContainer.shared.eventService) {
         self.eventService = eventService
@@ -33,10 +34,11 @@ final class IntelFeedViewModel {
     }
 
     func loadReports() async {
-        isLoading = true
         errorMessage = nil
         do {
-            reports = try await eventService.fetchIntelReports(category: nil)
+            var fetched = try await eventService.fetchIntelReports(category: nil)
+            mergeOptimisticReadState(&fetched)
+            reports = fetched
             isLoading = false
         } catch {
             errorMessage = error.localizedDescription
@@ -46,6 +48,7 @@ final class IntelFeedViewModel {
 
     func markAsRead(_ report: IntelReport) async {
         guard !report.isRead else { return }
+        optimisticallyReadIDs.insert(report.id)
         if let index = reports.firstIndex(where: { $0.id == report.id }) {
             reports[index].isRead = true
         }
@@ -62,10 +65,25 @@ final class IntelFeedViewModel {
                     }
                 },
                 receiveValue: { [weak self] reports in
-                    self?.reports = reports
-                    self?.isLoading = false
+                    guard let self else { return }
+                    var merged = reports
+                    self.mergeOptimisticReadState(&merged)
+                    self.reports = merged
+                    self.isLoading = false
                 }
             )
             .store(in: &cancellables)
+    }
+
+    private func mergeOptimisticReadState(_ reports: inout [IntelReport]) {
+        for i in reports.indices {
+            if optimisticallyReadIDs.contains(reports[i].id) {
+                reports[i].isRead = true
+            }
+        }
+        // Clean up IDs that Firestore has confirmed
+        optimisticallyReadIDs = optimisticallyReadIDs.filter { id in
+            reports.first(where: { $0.id == id })?.isRead != true
+        }
     }
 }

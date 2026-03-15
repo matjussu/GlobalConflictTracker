@@ -31,9 +31,7 @@ struct ContentView: View {
             NavigationStack {
                 IntelFeedView()
                     .navigationDestination(for: IntelReport.self) { report in
-                        if let event = SampleData.events.first(where: { $0.id == report.relatedEventID }) {
-                            EventDetailView(event: event)
-                        }
+                        IntelReportDetailView(report: report)
                     }
                     .navigationDestination(for: ConflictEvent.self) { event in
                         EventDetailView(event: event)

@@ -71,18 +71,39 @@ struct ConflictAnnotation: View {
                 .frame(width: 10, height: 6)
                 .shadow(color: markerColor.opacity(0.5), radius: 2)
 
-            // Label — short title
+            // Label — enriched info on selection
             if isSelected {
-                Text(event.title)
-                    .font(.system(size: 9, weight: .bold))
-                    .tracking(0.5)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(AppColors.surface.opacity(0.9))
-                    .clipShape(RoundedRectangle(cornerRadius: 4))
-                    .lineLimit(1)
-                    .frame(maxWidth: 120)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(event.title)
+                        .font(.system(size: 9, weight: .bold))
+                        .tracking(0.5)
+                        .foregroundStyle(.white)
+                        .lineLimit(2)
+
+                    HStack(spacing: 4) {
+                        Text(event.eventType.rawValue.uppercased())
+                            .font(.system(size: 7, weight: .semibold))
+                            .foregroundStyle(AppColors.accent)
+
+                        if !event.factionIDs.isEmpty {
+                            Text("•")
+                                .font(.system(size: 7))
+                                .foregroundStyle(AppColors.textTertiary)
+                            Text("\(event.factionIDs.count) FACTION\(event.factionIDs.count > 1 ? "S" : "")")
+                                .font(.system(size: 7, weight: .semibold))
+                                .foregroundStyle(AppColors.textSecondary)
+                        }
+                    }
+
+                    Text(RelativeTimeFormatter.string(from: event.timestamp))
+                        .font(.system(size: 7, weight: .medium))
+                        .foregroundStyle(AppColors.textTertiary)
+                }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 4)
+                .background(AppColors.surface.opacity(0.95))
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+                .frame(maxWidth: 160)
             }
         }
         .onAppear {

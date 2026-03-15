@@ -13,4 +13,7 @@ protocol FactionServiceProtocol {
 
     /// Search factions by name
     func searchFactions(query: String) async throws -> [Faction]
+
+    /// Listen to real-time updates for a single faction
+    func observeFaction(id: String) -> AnyPublisher<Faction, Error>
 }

@@ -6,8 +6,7 @@ struct FactionProfileView: View {
 
     init(faction: Faction) {
         _viewModel = State(initialValue: FactionProfileViewModel(
-            faction: faction,
-            eventService: ServiceContainer.shared.eventService
+            faction: faction
         ))
     }
 

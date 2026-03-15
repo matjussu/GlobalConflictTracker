@@ -1,6 +1,13 @@
 import SwiftUI
 import Combine
 import MapKit
+import CoreLocation
+
+struct EventConnection: Identifiable {
+    let from: CLLocationCoordinate2D
+    let to: CLLocationCoordinate2D
+    let id: String
+}
 
 @Observable
 final class TacticalMapViewModel {
@@ -64,6 +71,25 @@ final class TacticalMapViewModel {
             $0.summary.localizedCaseInsensitiveContains(searchText) ||
             $0.tags.contains(where: { $0.localizedCaseInsensitiveContains(searchText) })
         }
+    }
+
+    /// Connections between events sharing common factions
+    var eventConnections: [EventConnection] {
+        var connections: [EventConnection] = []
+        let events = filteredEvents
+        for i in 0..<events.count {
+            for j in (i + 1)..<events.count {
+                let shared = events[i].factionIDs.filter { events[j].factionIDs.contains($0) }
+                if !shared.isEmpty {
+                    connections.append(EventConnection(
+                        from: events[i].coordinate,
+                        to: events[j].coordinate,
+                        id: "\(events[i].id)-\(events[j].id)"
+                    ))
+                }
+            }
+        }
+        return connections
     }
 
     /// Most critical unread event for the bottom sheet alert

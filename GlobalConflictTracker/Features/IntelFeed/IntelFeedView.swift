@@ -40,9 +40,6 @@ struct IntelFeedView: View {
         }
         .background(AppColors.background.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
-        .task {
-            await viewModel.loadReports()
-        }
     }
 
     // MARK: - Header

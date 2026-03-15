@@ -4,12 +4,19 @@ import MapKit
 /// Matches Figma node 1:527 — Event Intelligence Detail
 struct EventDetailView: View {
     @State private var viewModel: EventDetailViewModel
+    @State private var cameraPosition: MapCameraPosition
 
     init(event: ConflictEvent) {
         _viewModel = State(initialValue: EventDetailViewModel(
             event: event,
             eventService: ServiceContainer.shared.eventService,
             factionService: ServiceContainer.shared.factionService
+        ))
+        _cameraPosition = State(initialValue: .region(
+            MKCoordinateRegion(
+                center: event.coordinate,
+                span: MKCoordinateSpan(latitudeDelta: 2, longitudeDelta: 2)
+            )
         ))
     }
 
@@ -60,7 +67,7 @@ struct EventDetailView: View {
     // MARK: - Mini Map
 
     private var miniMap: some View {
-        Map {
+        Map(position: $cameraPosition) {
             Annotation(
                 viewModel.event.title,
                 coordinate: viewModel.event.coordinate,

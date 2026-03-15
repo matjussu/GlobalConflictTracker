@@ -31,4 +31,14 @@ final class MockFactionService: FactionServiceProtocol {
         guard !query.isEmpty else { return mockFactions }
         return mockFactions.filter { $0.name.localizedCaseInsensitiveContains(query) }
     }
+
+    func observeFaction(id: String) -> AnyPublisher<Faction, Error> {
+        if let faction = mockFactions.first(where: { $0.id == id }) {
+            return Just(faction)
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher()
+        }
+        return Fail(error: MockError.notFound)
+            .eraseToAnyPublisher()
+    }
 }
