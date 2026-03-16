@@ -38,6 +38,18 @@ enum AppColors {
     /// Active/selected border — uses accent
     static let borderActive = accent
 
+    // MARK: - Visualization Colors
+    /// Trajectory stroke — orange-red for missile/strike arcs
+    static let trajectoryStroke = Color(red: 1.0, green: 0.3, blue: 0.1)
+    /// Trajectory glow — warm orange for projectile glow
+    static let trajectoryGlow = Color(red: 1.0, green: 0.5, blue: 0.0)
+    /// Restricted zone fill — red tint
+    static let zoneRestricted = Color(red: 1.0, green: 0.2, blue: 0.2)
+    /// Maritime zone fill — blue tint
+    static let zoneMaritime = Color(red: 0.2, green: 0.5, blue: 1.0)
+    /// Cyber pulse — neon green for data flow
+    static let cyberPulse = Color(red: 0.4, green: 1.0, blue: 0.6)
+
     // MARK: - Severity Colors
     static func severityColor(_ severity: Severity) -> Color {
         switch severity {

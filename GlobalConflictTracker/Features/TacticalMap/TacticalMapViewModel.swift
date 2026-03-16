@@ -73,6 +73,54 @@ final class TacticalMapViewModel {
         }
     }
 
+    // MARK: - Events by Visualization Type
+
+    var trajectoryEvents: [ConflictEvent] {
+        filteredEvents.filter {
+            if case .trajectory = $0.visualization { return true }
+            return false
+        }
+    }
+
+    var movementEvents: [ConflictEvent] {
+        filteredEvents.filter {
+            if case .movementPath = $0.visualization { return true }
+            return false
+        }
+    }
+
+    var zoneEvents: [ConflictEvent] {
+        filteredEvents.filter {
+            if case .zone = $0.visualization { return true }
+            return false
+        }
+    }
+
+    var connectionEvents: [ConflictEvent] {
+        filteredEvents.filter {
+            if case .connection = $0.visualization { return true }
+            return false
+        }
+    }
+
+    var pointEvents: [ConflictEvent] {
+        filteredEvents.filter {
+            guard let viz = $0.visualization else { return true }
+            if case .point = viz { return true }
+            return false
+        }
+    }
+
+    /// Current zoom level derived from camera position span (for adaptive labels)
+    var currentZoomLevel: Double {
+        switch cameraPosition {
+        case .region(let region):
+            return region.span.latitudeDelta
+        default:
+            return 10.0
+        }
+    }
+
     /// Connections between events sharing common factions
     var eventConnections: [EventConnection] {
         var connections: [EventConnection] = []

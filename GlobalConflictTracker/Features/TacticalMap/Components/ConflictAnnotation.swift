@@ -5,8 +5,19 @@ import SwiftUI
 struct ConflictAnnotation: View {
     let event: ConflictEvent
     var isSelected: Bool = false
+    var zoomLevel: Double = 10.0
 
     @State private var isPulsing = false
+
+    /// Whether to show the compact label based on zoom level and severity
+    private var showCompactLabel: Bool {
+        if isSelected { return false } // Selected shows full label instead
+        switch event.severity {
+        case .critical: return zoomLevel < 30 // Almost always visible
+        case .warning: return zoomLevel < 15  // Visible at region zoom
+        case .low: return zoomLevel < 5       // Only visible when zoomed in
+        }
+    }
 
     private var size: CGFloat {
         if isSelected { return 40 }
@@ -70,6 +81,23 @@ struct ConflictAnnotation: View {
                 .fill(markerColor)
                 .frame(width: 10, height: 6)
                 .shadow(color: markerColor.opacity(0.5), radius: 2)
+
+            // Compact always-visible label (zoom-dependent)
+            if showCompactLabel {
+                Text(event.compactLabel)
+                    .font(.system(size: 8, weight: .bold))
+                    .tracking(1.0)
+                    .foregroundStyle(markerColor)
+                    .lineLimit(1)
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 2)
+                    .background(AppColors.surface.opacity(0.85))
+                    .clipShape(RoundedRectangle(cornerRadius: 3))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 3)
+                            .stroke(markerColor.opacity(0.3), lineWidth: 0.5)
+                    )
+            }
 
             // Label — enriched info on selection
             if isSelected {

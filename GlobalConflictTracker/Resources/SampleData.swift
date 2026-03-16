@@ -44,25 +44,217 @@ enum SampleData {
     // MARK: - Conflict Events
 
     static let events: [ConflictEvent] = [
+
+        // 1. US Missile Strike on Iran — trajectory
         ConflictEvent(
             id: "evt-001",
-            title: "Naval Deployment in Red Sea",
-            summary: "Multiple destroyer-class vessels detected entering sector 7-G. High probability of engagement.",
-            latitude: 15.5,
-            longitude: 42.0,
+            title: "US Cruise Missile Strike on Iranian Facility",
+            summary: "Multiple Tomahawk cruise missiles launched from USS Eisenhower strike group in the Red Sea targeting a nuclear enrichment facility near Isfahan. Impact confirmed by satellite reconnaissance.",
+            latitude: 32.65,
+            longitude: 51.68,
+            timestamp: Date().addingTimeInterval(-3600),
+            severity: .critical,
+            eventType: .airspace,
+            factionIDs: ["fac-us"],
+            sourceReliability: confirmedSource,
+            tags: ["missile", "iran", "strike", "nuclear"],
+            imageURL: nil,
+            isRead: false,
+            visualization: .trajectory(TrajectoryData(
+                origin: GeoPoint(latitude: 15.5, longitude: 42.0),
+                destination: GeoPoint(latitude: 32.65, longitude: 51.68),
+                originLabel: "USS Eisenhower, Red Sea",
+                destinationLabel: "Isfahan Nuclear Facility",
+                weaponType: "Tomahawk Block V",
+                arcHeight: 0.2,
+                isActive: false
+            )),
+            subtype: .missileStrike
+        ),
+
+        // 2. Russian Drone Strike on Kyiv — trajectory
+        ConflictEvent(
+            id: "evt-002",
+            title: "Shahed Drone Swarm Targets Kyiv Infrastructure",
+            summary: "Wave of 35+ Shahed-136 drones launched from Crimea targeting energy infrastructure in Kyiv. Air defense intercepted 28 drones. 7 impacts confirmed on power substations.",
+            latitude: 50.45,
+            longitude: 30.52,
             timestamp: Date().addingTimeInterval(-7200),
             severity: .critical,
+            eventType: .airspace,
+            factionIDs: [],
+            sourceReliability: confirmedSource,
+            tags: ["drone", "ukraine", "kyiv", "energy"],
+            imageURL: nil,
+            isRead: false,
+            visualization: .trajectory(TrajectoryData(
+                origin: GeoPoint(latitude: 45.3, longitude: 34.0),
+                destination: GeoPoint(latitude: 50.45, longitude: 30.52),
+                originLabel: "Dzhankoi Airbase, Crimea",
+                destinationLabel: "Kyiv Power Grid",
+                weaponType: "Shahed-136 Swarm",
+                arcHeight: 0.12,
+                isActive: false
+            )),
+            subtype: .droneStrike
+        ),
+
+        // 3. Israeli Airstrike on Damascus — trajectory
+        ConflictEvent(
+            id: "evt-003",
+            title: "Israeli Airstrike on Damascus Weapons Depot",
+            summary: "IAF F-35I stealth fighters conducted precision strikes on a weapons storage facility southwest of Damascus. Secondary explosions reported. Hezbollah supply line targeted.",
+            latitude: 33.43,
+            longitude: 36.25,
+            timestamp: Date().addingTimeInterval(-14400),
+            severity: .warning,
+            eventType: .airspace,
+            factionIDs: [],
+            sourceReliability: likelySource,
+            tags: ["airstrike", "syria", "israel", "hezbollah"],
+            imageURL: nil,
+            isRead: false,
+            visualization: .trajectory(TrajectoryData(
+                origin: GeoPoint(latitude: 31.25, longitude: 34.78),
+                destination: GeoPoint(latitude: 33.43, longitude: 36.25),
+                originLabel: "Nevatim AFB, Israel",
+                destinationLabel: "Damascus Weapons Depot",
+                weaponType: "GBU-39 SDB",
+                arcHeight: 0.10,
+                isActive: false
+            )),
+            subtype: .airstrike
+        ),
+
+        // 4. Houthi Anti-Ship Missile — trajectory
+        ConflictEvent(
+            id: "evt-004",
+            title: "Houthi Anti-Ship Missile Targets Commercial Vessel",
+            summary: "Anti-ship ballistic missile launched from Yemen coast targeting a commercial container ship in the Bab el-Mandeb strait. USS Carney intercepted with SM-2.",
+            latitude: 13.8,
+            longitude: 42.8,
+            timestamp: Date().addingTimeInterval(-5400),
+            severity: .critical,
+            eventType: .airspace,
+            factionIDs: ["fac-us"],
+            sourceReliability: confirmedSource,
+            tags: ["houthi", "red-sea", "anti-ship", "missile"],
+            imageURL: nil,
+            isRead: false,
+            visualization: .trajectory(TrajectoryData(
+                origin: GeoPoint(latitude: 13.0, longitude: 44.2),
+                destination: GeoPoint(latitude: 13.8, longitude: 42.8),
+                originLabel: "Houthi Coastal Battery, Yemen",
+                destinationLabel: "Container Vessel, Bab el-Mandeb",
+                weaponType: "ASBM",
+                arcHeight: 0.08,
+                isActive: false
+            )),
+            subtype: .missileStrike
+        ),
+
+        // 5. US Carrier Strike Group Transit — movementPath
+        ConflictEvent(
+            id: "evt-005",
+            title: "CSG-2 Transit to Eastern Mediterranean",
+            summary: "Carrier Strike Group 2 led by USS Eisenhower transiting from Norfolk through Gibraltar to the Eastern Mediterranean. Currently passing through Strait of Gibraltar. Full combat readiness.",
+            latitude: 36.0,
+            longitude: -5.6,
+            timestamp: Date().addingTimeInterval(-21600),
+            severity: .warning,
             eventType: .naval,
             factionIDs: ["fac-us", "fac-uk"],
             sourceReliability: confirmedSource,
-            tags: ["naval", "red-sea", "deployment"],
+            tags: ["naval", "carrier", "mediterranean", "transit"],
             imageURL: nil,
-            isRead: false
+            isRead: true,
+            visualization: .movementPath(MovementPathData(
+                waypoints: [
+                    GeoPoint(latitude: 36.95, longitude: -76.33),
+                    GeoPoint(latitude: 38.0, longitude: -55.0),
+                    GeoPoint(latitude: 38.5, longitude: -30.0),
+                    GeoPoint(latitude: 37.0, longitude: -15.0),
+                    GeoPoint(latitude: 36.0, longitude: -5.6),
+                    GeoPoint(latitude: 35.0, longitude: 15.0),
+                    GeoPoint(latitude: 34.5, longitude: 32.0),
+                ],
+                originLabel: "Norfolk Naval Base",
+                destinationLabel: "Eastern Mediterranean",
+                assetType: "Carrier Strike Group 2",
+                progressFraction: 0.57
+            )),
+            subtype: .fleetMovement
         ),
+
+        // 6. Chinese Naval Blockade Exercise — zone
         ConflictEvent(
-            id: "evt-002",
-            title: "Cyber Attack on Power Grid",
-            summary: "Sophisticated intrusion detected targeting eastern European power infrastructure. Attribution pending.",
+            id: "evt-006",
+            title: "PLA Navy Live-Fire Exercise Around Taiwan",
+            summary: "People's Liberation Army Navy conducting large-scale live-fire exercise establishing six exclusion zones around Taiwan. Commercial shipping rerouted. 40+ vessels deployed.",
+            latitude: 24.0,
+            longitude: 121.0,
+            timestamp: Date().addingTimeInterval(-10800),
+            severity: .critical,
+            eventType: .naval,
+            factionIDs: ["fac-cn"],
+            sourceReliability: confirmedSource,
+            tags: ["china", "taiwan", "blockade", "exercise", "naval"],
+            imageURL: nil,
+            isRead: false,
+            visualization: .zone(ZoneData(
+                boundary: [
+                    GeoPoint(latitude: 26.0, longitude: 119.5),
+                    GeoPoint(latitude: 26.0, longitude: 123.0),
+                    GeoPoint(latitude: 24.5, longitude: 123.5),
+                    GeoPoint(latitude: 22.0, longitude: 122.5),
+                    GeoPoint(latitude: 21.5, longitude: 120.5),
+                    GeoPoint(latitude: 22.5, longitude: 119.0),
+                    GeoPoint(latitude: 24.5, longitude: 119.0),
+                ],
+                radiusMeters: nil,
+                zoneLabel: "PLA EXCLUSION ZONE",
+                fillOpacity: 0.12,
+                isActive: true
+            )),
+            subtype: .navalBlockade
+        ),
+
+        // 7. NATO No-Fly Zone, Northern Syria — zone
+        ConflictEvent(
+            id: "evt-007",
+            title: "NATO Enforced No-Fly Zone Over Northern Syria",
+            summary: "NATO coalition enforcing no-fly zone over northern Syria following chemical weapons intelligence. AWACS and fighter patrols active 24/7. Russian aircraft warned off twice.",
+            latitude: 36.8,
+            longitude: 38.5,
+            timestamp: Date().addingTimeInterval(-28800),
+            severity: .warning,
+            eventType: .airspace,
+            factionIDs: ["fac-us", "fac-uk", "fac-fr"],
+            sourceReliability: confirmedSource,
+            tags: ["nato", "syria", "no-fly", "airspace"],
+            imageURL: nil,
+            isRead: false,
+            visualization: .zone(ZoneData(
+                boundary: [
+                    GeoPoint(latitude: 37.2, longitude: 36.0),
+                    GeoPoint(latitude: 37.2, longitude: 42.0),
+                    GeoPoint(latitude: 36.0, longitude: 42.0),
+                    GeoPoint(latitude: 35.5, longitude: 40.0),
+                    GeoPoint(latitude: 36.0, longitude: 36.0),
+                ],
+                radiusMeters: nil,
+                zoneLabel: "NATO NO-FLY ZONE",
+                fillOpacity: 0.08,
+                isActive: true
+            )),
+            subtype: .airspaceViolation
+        ),
+
+        // 8. Cyber Attack on European Power Grid — connection
+        ConflictEvent(
+            id: "evt-008",
+            title: "State-Sponsored Cyber Attack on Kyiv Power Grid",
+            summary: "Sophisticated intrusion detected targeting eastern European power infrastructure. Malware attributed to GRU Unit 74455 (Sandworm). Multiple substations affected across Kyiv.",
             latitude: 50.45,
             longitude: 30.52,
             timestamp: Date().addingTimeInterval(-14400),
@@ -70,39 +262,67 @@ enum SampleData {
             eventType: .cyber,
             factionIDs: [],
             sourceReliability: likelySource,
-            tags: ["cyber", "infrastructure", "europe"],
+            tags: ["cyber", "infrastructure", "europe", "power-grid"],
             imageURL: nil,
-            isRead: true
+            isRead: true,
+            visualization: .connection(ConnectionData(
+                source: GeoPoint(latitude: 55.75, longitude: 37.62),
+                target: GeoPoint(latitude: 50.45, longitude: 30.52),
+                sourceLabel: "GRU Unit 74455, Moscow",
+                targetLabel: "Power Grid, Kyiv",
+                connectionType: "malware_deployment"
+            )),
+            subtype: .cyberAttack
         ),
+
+        // 9. Troop Buildup at Border — movementPath
         ConflictEvent(
-            id: "evt-003",
-            title: "Diplomatic Summit Cancelled",
-            summary: "Scheduled bilateral talks between regional powers suspended following border incident.",
-            latitude: 35.68,
-            longitude: 51.39,
-            timestamp: Date().addingTimeInterval(-28800),
-            severity: .low,
-            eventType: .diplomatic,
+            id: "evt-009",
+            title: "Russian Mechanized Divisions Moving to Border",
+            summary: "Three mechanized battalions observed moving from staging areas in Belgorod Oblast toward the Ukrainian border. Estimated 4,500 personnel with heavy armor and mobile artillery.",
+            latitude: 50.6,
+            longitude: 36.6,
+            timestamp: Date().addingTimeInterval(-18000),
+            severity: .warning,
+            eventType: .airspace,
             factionIDs: [],
             sourceReliability: confirmedSource,
-            tags: ["diplomatic", "middle-east"],
+            tags: ["troop-movement", "border", "russia", "ukraine"],
             imageURL: nil,
-            isRead: false
+            isRead: false,
+            visualization: .movementPath(MovementPathData(
+                waypoints: [
+                    GeoPoint(latitude: 52.0, longitude: 38.0),
+                    GeoPoint(latitude: 51.5, longitude: 37.5),
+                    GeoPoint(latitude: 51.0, longitude: 37.0),
+                    GeoPoint(latitude: 50.6, longitude: 36.6),
+                    GeoPoint(latitude: 50.3, longitude: 36.2),
+                ],
+                originLabel: "Staging Area, Lipetsk",
+                destinationLabel: "Border Region, Belgorod",
+                assetType: "3rd Mechanized Division",
+                progressFraction: 0.75
+            )),
+            subtype: .troopMovement
         ),
+
+        // 10. G7 Emergency Summit — point (classic)
         ConflictEvent(
-            id: "evt-004",
-            title: "Airspace Violation Detected",
-            summary: "Unidentified aircraft entered restricted airspace over contested territory. Interceptors scrambled.",
-            latitude: 36.2,
-            longitude: 37.1,
-            timestamp: Date().addingTimeInterval(-3600),
-            severity: .critical,
-            eventType: .airspace,
-            factionIDs: ["fac-fr"],
-            sourceReliability: unverifiedSource,
-            tags: ["airspace", "violation", "intercept"],
+            id: "evt-010",
+            title: "G7 Emergency Summit on Middle East Crisis",
+            summary: "G7 leaders convene emergency summit in Brussels to coordinate response to escalating Middle East crisis. Joint statement expected on sanctions and diplomatic channels.",
+            latitude: 50.85,
+            longitude: 4.35,
+            timestamp: Date().addingTimeInterval(-43200),
+            severity: .low,
+            eventType: .diplomatic,
+            factionIDs: ["fac-us", "fac-uk", "fac-fr", "fac-de", "fac-jp"],
+            sourceReliability: confirmedSource,
+            tags: ["g7", "summit", "diplomatic", "sanctions"],
             imageURL: nil,
-            isRead: false
+            isRead: false,
+            visualization: .point,
+            subtype: .summit
         ),
     ]
 
@@ -119,7 +339,7 @@ enum SampleData {
             airAssets: 320_000,
             status: .activeDeployment,
             deploymentZones: ["Middle East", "Pacific"],
-            recentEventIDs: ["evt-001"],
+            recentEventIDs: ["evt-001", "evt-004", "evt-005"],
             personnelTrend: 0.5,
             fleetTrend: -1.2,
             airTrend: 0.8
@@ -134,7 +354,7 @@ enum SampleData {
             airAssets: 33_000,
             status: .standby,
             deploymentZones: ["North Atlantic"],
-            recentEventIDs: ["evt-001"],
+            recentEventIDs: ["evt-005", "evt-007"],
             personnelTrend: -0.3,
             fleetTrend: 0.1,
             airTrend: -0.5
@@ -149,7 +369,7 @@ enum SampleData {
             airAssets: 395_000,
             status: .borderOps,
             deploymentZones: ["South China Sea", "Taiwan Strait"],
-            recentEventIDs: [],
+            recentEventIDs: ["evt-006"],
             personnelTrend: 1.2,
             fleetTrend: 2.1,
             airTrend: 1.8
@@ -164,7 +384,7 @@ enum SampleData {
             airAssets: 40_000,
             status: .domesticSecurity,
             deploymentZones: ["Sahel", "Mediterranean"],
-            recentEventIDs: ["evt-004"],
+            recentEventIDs: ["evt-007"],
             personnelTrend: -0.1,
             fleetTrend: 0.3,
             airTrend: 0.0
@@ -179,7 +399,7 @@ enum SampleData {
             airAssets: 47_000,
             status: .maritimePatrol,
             deploymentZones: ["East China Sea", "Pacific"],
-            recentEventIDs: [],
+            recentEventIDs: ["evt-010"],
             personnelTrend: 0.2,
             fleetTrend: 0.7,
             airTrend: 0.4
@@ -194,7 +414,7 @@ enum SampleData {
             airAssets: 28_000,
             status: .logisticsSupport,
             deploymentZones: ["Baltic", "Eastern Europe"],
-            recentEventIDs: [],
+            recentEventIDs: ["evt-010"],
             personnelTrend: 0.9,
             fleetTrend: 1.5,
             airTrend: 1.1
@@ -278,7 +498,7 @@ enum SampleData {
             severity: .low,
             imageURL: nil,
             sourceReliability: unverifiedSource,
-            relatedEventID: "evt-003",
+            relatedEventID: "evt-010",
             category: .chronological,
             isRead: true,
             sourceURL: nil,
