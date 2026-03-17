@@ -29,6 +29,17 @@ struct ContentView: View {
             }
 
             NavigationStack {
+                GlobeView()
+                    .navigationDestination(for: ConflictEvent.self) { event in
+                        EventDetailView(event: event)
+                    }
+            }
+            .tag(AppTab.globe)
+            .tabItem {
+                AppTab.globe.label
+            }
+
+            NavigationStack {
                 IntelFeedView()
                     .navigationDestination(for: IntelReport.self) { report in
                         IntelReportDetailView(report: report)
